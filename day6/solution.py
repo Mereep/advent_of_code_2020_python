@@ -13,6 +13,8 @@ class Group:
     def get_all_possible_answers(self) -> Set[str]:
         """
         Gets a set of all letters that popup within ANY group member
+
+        (just for warmup; not needed)
         :return:
         """
         possible_answers: Set[str] = set()
@@ -23,7 +25,7 @@ class Group:
 
         return possible_answers
 
-    def all_positive_answers(self) -> Set[str]:
+    def answers_whole_group_positive(self) -> Set[str]:
         """
         answers (letters) which where found within ALL members
 
@@ -38,14 +40,14 @@ class Group:
 
         return all_true
 
-    def count_all_positive_answers(self) -> int:
+    def count_answers_whole_group_positive(self) -> int:
         """
-        counts [all_positive_answers]
+        counts [answers_whole_group_positive]
         :return:
         """
-        return len(self.all_positive_answers())
+        return len(self.answers_whole_group_positive())
 
-    def any_positive_answers(self) -> Set[str]:
+    def answers_any_member_positive(self) -> Set[str]:
         """
         answers (letters) which where found within SOME (at least one) members
 
@@ -57,15 +59,16 @@ class Group:
 
         return any_true
 
-    def count_any_positive_answers(self) -> int:
+    def count_answers_any_member_positive(self) -> int:
         """
-        counts [any_positive_answers]
+        counts [answers_any_member_positive]
         :return:
         """
-        return len(self.any_positive_answers())
+        return len(self.answers_any_member_positive())
 
     def n_members(self) -> int:
         return len(self.answers)
+
 
 if __name__ == "__main__":
 
@@ -74,7 +77,7 @@ if __name__ == "__main__":
         group_lines: List[str] = []
         all_lines = f.readlines()
 
-    # create groups (they are separated by an empty line)
+    # (ii) create groups (they are separated by an empty line)
     groups: List[Group] = []
     for line in all_lines:
         line = line.strip() # just remove some trailing fun
@@ -87,17 +90,22 @@ if __name__ == "__main__":
     # dont forget the last entry
     groups.append(Group(group_lines))
 
+    # (iii) some tests
     print("Some debug info")
-    print(groups[-1].answers, "\n"
-          "All positives", groups[-1].all_positive_answers(), groups[-1].count_all_positive_answers(), "\n"
-          "Any positives", groups[-1].any_positive_answers(), groups[-1].count_any_positive_answers(), "\n\n")
+    print(
+        groups[-1].answers, "\n"
+        "All positives", groups[-1].answers_whole_group_positive(), groups[-1].count_answers_whole_group_positive(), "\n"
+        "Any positives", groups[-1].answers_any_member_positive(), groups[-1].count_answers_any_member_positive(), "\n")
 
-    # first quest: sum of all positive answers
+
+    # second quest: sum of answers any group member was positive about
     sum_of_anyone_positive = 0
+
+    # second quest: sum of answers each (all of them) group member was positive about
     sum_of_everyone_positive = 0
     for group in groups:
-        sum_of_anyone_positive += group.count_any_positive_answers()
-        sum_of_everyone_positive += group.count_all_positive_answers()
+        sum_of_anyone_positive += group.count_answers_any_member_positive()
+        sum_of_everyone_positive += group.count_answers_whole_group_positive()
 
-    print("# ANYONE answered positive over all groups: ", sum_of_anyone_positive)
-    print("# EVERYONE positive over all groups: ", sum_of_everyone_positive)
+    print("# answers ANYONE answered positive over all groups: ", sum_of_anyone_positive)
+    print("# answers EVERYONE positive over all groups: ", sum_of_everyone_positive)
