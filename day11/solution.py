@@ -253,9 +253,3 @@ if __name__ == '__main__':
     simulation.print_state()
     n_seats_occupied = (simulation.current_state == '#').sum()
     print("Occupied view range version: ", n_seats_occupied)
-
-
-
-
-
-

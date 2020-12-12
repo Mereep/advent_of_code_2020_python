@@ -85,9 +85,32 @@ if __name__ == '__main__':
     # --> most of them can NEVER be valid
 
     # count "removable" adapters
-    n_removable_single = count_removables(joltages_as_numbers_sorted, first_index=0, start=1)
 
-    print(n_removable_single)
+    # we split the joltages into parts, where each part consists of consecutive
+    # joltages where the difference < 3
+
+    # so we can solve this as a subproblem
+    joltages_split: List[List[int]] = []
+    current_split = []
+    for i in range(len(joltages_as_numbers_sorted) - 1):
+        diff_to_next = joltages_as_numbers_sorted[i+1] - joltages_as_numbers_sorted[i]
+        current_split.append(joltages_as_numbers_sorted[i])
+        if diff_to_next >= 3:
+            joltages_split.append(current_split)
+            current_split = [joltages_as_numbers_sorted[i]]
+
+
+    split_variations: List[int] = []
+    for i in range(0, len(joltages_split)):
+        split_variations.append(count_removables(joltages_split[i],
+                                                 first_index=0,
+                                                 start=1))
+
+    total_sum: int = 1
+    for split_variation in split_variations:
+        total_sum *= split_variation
+
+    print(total_sum)
 
 
 
